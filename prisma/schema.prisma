@@ -12,3 +12,89 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+
+
+model catigories {
+  id            Int             @id @default(autoincrement())
+  name          String          @db.VarChar(100) @unique
+  news_list news_list[]
+  createdAt     DateTime        @default(now()) @db.Timestamp(0)
+  updateAt      DateTime        @default(now()) @db.Timestamp(0) @updatedAt
+}
+
+
+
+model news_list {
+  id           Int              @id @default(autoincrement())
+  title        String           @db.VarChar(100)
+  short_des    String           @db.VarChar(400)
+  image1       String           @db.VarChar(300)
+  image2       String           @db.VarChar(300)
+  image3       String           @db.VarChar(300)
+  image4       String           @db.VarChar(300)
+  keywords     String           @db.VarChar(300)
+  long_des     String           @db.LongText
+  type         String           @db.VarChar(200)
+  catID Int
+  comments comments[]
+  catigories  catigories      @relation(fields: [catID], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  createdAt     DateTime        @default(now()) @db.Timestamp(0)
+  updateAt      DateTime        @default(now()) @db.Timestamp(0) @updatedAt
+}
+
+
+
+model users {
+  id            Int             @id @default(autoincrement())
+  firstName     String          @db.VarChar(50)
+  lastName      String          @db.VarChar(50)
+  email         String          @db.VarChar(50) @unique
+  mobile        String          @db.VarChar(50)
+  password      String          @db.VarChar(50)
+  otp           String          @db.VarChar(50)
+  comments comments[]
+  createdAt     DateTime        @default(now()) @db.Timestamp(0)
+  updateAt      DateTime        @default(now()) @db.Timestamp(0) @updatedAt
+}
+
+model comments {
+  id           Int              @id @default(autoincrement())
+  userID       Int
+  postID       Int
+  users        users            @relation(fields: [userID], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  news_list    news_list        @relation(fields: [postID], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  descriptions String           @db.VarChar(1000)
+  createdAt     DateTime        @default(now()) @db.Timestamp(0)
+  updateAt      DateTime        @default(now()) @db.Timestamp(0) @updatedAt
+}
+
+
+model socials {
+id              Int             @id @default(autoincrement())
+facebook        String          @db.VarChar(200)
+youtube         String          @db.VarChar(200)
+twitter         String          @db.VarChar(200)
+linkedin        String          @db.VarChar(200)
+about           String          @db.Text
+address         String          @db.Text
+createdAt       DateTime        @default(now()) @db.Timestamp(0)
+updatedAt       DateTime        @default(now()) @db.Timestamp(0) @updatedAt
+}
+
+
+model subscribers {
+id             Int              @id @default(autoincrement())
+email          String           @db.VarChar(100) @unique
+createdAt      DateTime         @default(now()) @db.Timestamp(0)
+updatedAt      DateTime         @default(now()) @db.Timestamp(0) @updatedAt
+}
+
+
+model policies{
+id            Int               @id @default(autoincrement())
+long_des      String            @db.LongText
+type          String            @db.VarChar(50)
+}
+
+

@@ -1,6 +1,6 @@
-import { CreateToken } from "@/app/utility/JWTTokenHelper";
 import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
+import { CreateToken } from "../../../../utility/JWTTokenHelper";
 
 export async function POST(req, res) {
   try {

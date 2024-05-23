@@ -1,19 +1,15 @@
-import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
-
+import { PrismaClient } from "@prisma/client";
 export async function POST(req, res) {
-  const prisma = new PrismaClient();
-  const data = await req.json();
-
-  const count = await prisma.users.count({ where: data });
-
-  if (count === 1) {
-    return NextResponse.json({ status: "success", data: "Validate OTP Code" });
-  } else {
-    return NextResponse.json({ status: "fail", data: "Invalid OTP Code" });
-  }
-
   try {
+    let reqBody = await req.json();
+    const prisma = new PrismaClient();
+    const count = await prisma.users.count({ where: reqBody });
+    if (count === 1) {
+      return NextResponse.json({ status: "success", data: "Valid OTP Code" });
+    } else {
+      return NextResponse.json({ status: "fail", data: "Invalid OTP Code" });
+    }
   } catch (e) {
     return NextResponse.json({ status: "fail", data: e });
   }
